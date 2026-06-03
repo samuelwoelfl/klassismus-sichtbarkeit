@@ -8,9 +8,9 @@
 
   let currentSlide = 0;
 
-  /** @param {number} value 0 = hohe Klasse, 100 = niedrige Klasse */
+  /** @param {number} value 0 = niedrige Klasse, 100 = hohe Klasse */
   function getLayerOpacity(layerOrder, totalLayers, value) {
-    const t = value / 100;
+    const t = (100 - value) / 100;
     const segmentSize = 1 / totalLayers;
     const start = layerOrder * segmentSize;
     const end = (layerOrder + 1) * segmentSize;
@@ -41,10 +41,10 @@
   }
 
   function buildStatusText(sliderValue, hiddenLabels) {
-    if (sliderValue === 0) {
+    if (sliderValue >= 100) {
       return 'Alle Bildungsorte sind sichtbar.';
     }
-    if (sliderValue >= 100) {
+    if (sliderValue === 0) {
       return 'Nur noch das bleibt, was ohne Klassenprivileg zugänglich ist.';
     }
     if (hiddenLabels.length === 0) {
@@ -116,5 +116,5 @@
   });
 
   initDots();
-  applySliderToAllSlides(0);
+  applySliderToAllSlides(Number(slider.value));
 })();

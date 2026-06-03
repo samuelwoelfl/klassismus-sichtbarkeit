@@ -48,7 +48,7 @@ CSS für gestapelte Fotos:
 
 ## Slider
 
-- **Links (0)** — hohe Klasse: alle Ebenen sichtbar  
-- **Rechts (100)** — niedrige Klasse: alle `layer-privilege` unsichtbar  
+- **Links (0)** — niedrige Klasse: alle `layer-privilege` unsichtbar  
+- **Rechts (100)** — hohe Klasse: alle Ebenen sichtbar  
 
 Der Regler gilt für alle Slides gleichzeitig.
