@@ -2,6 +2,7 @@
   const slider = document.getElementById('class-slider');
   const statusEl = document.getElementById('visibility-status');
   const slides = Array.from(document.querySelectorAll('.slide'));
+  const captions = Array.from(document.querySelectorAll('.slide-caption'));
   const prevBtn = document.querySelector('.nav-prev');
   const nextBtn = document.querySelector('.nav-next');
   const dotsContainer = document.querySelector('.slide-dots');
@@ -80,6 +81,10 @@
 
     slides.forEach((slide, i) => {
       slide.classList.toggle('is-active', i === currentSlide);
+    });
+
+    captions.forEach((caption, i) => {
+      caption.classList.toggle('is-active', i === currentSlide);
     });
 
     dotsContainer.querySelectorAll('button').forEach((dot, i) => {

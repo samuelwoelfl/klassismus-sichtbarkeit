@@ -14,14 +14,45 @@
     <header class="top-bar">
       <div class="logo-box">Klassismus</div>
       <nav class="top-nav" aria-label="Hauptnavigation">
+        <a href="#intro">Intro</a>
         <a href="#stage">Szenen</a>
         <a href="#controls">Regler</a>
-        <a href="#note">Info</a>
       </nav>
       <span class="lang-select" aria-hidden="true">DE</span>
     </header>
 
+    <section id="intro" class="page-intro">
+      <p class="hero-eyebrow">
+        <em>Interaktive Erkundung</em> von Bildung &amp; sozialer Klasse
+      </p>
+      <h1 class="hero-title">
+        <span class="title-solid">Sichtbarkeit</span>
+        <span class="title-outline">der Wege</span>
+      </h1>
+      <p class="intro-lede">
+        Schiebe den Regler nach links — und beobachte, welche Bildungswege nach und nach verschwinden.
+      </p>
+    </section>
+
     <main id="stage" class="stage" aria-live="polite">
+      <div class="slide-texts">
+        <figcaption class="slide-caption is-active" data-slide="0">
+          <span class="slide-tag">Szene 01</span>
+          <strong>Die Stadt</strong>
+          <span class="slide-hint">Gymnasium</span>
+        </figcaption>
+        <figcaption class="slide-caption" data-slide="1">
+          <span class="slide-tag">Szene 02</span>
+          <strong>Kultur &amp; Wissen</strong>
+          <span class="slide-hint">Museum · Konzerthaus · Forschungsinstitut</span>
+        </figcaption>
+        <figcaption class="slide-caption" data-slide="2">
+          <span class="slide-tag">Szene 03</span>
+          <strong>Beruf &amp; Weiterbildung</strong>
+          <span class="slide-hint">Duale Hochschule · Meisterschule · Berufsakademie</span>
+        </figcaption>
+      </div>
+
       <div class="hero-frame">
         <div class="slideshow">
           <button type="button" class="nav nav-prev" aria-label="Vorheriges Bild">
@@ -29,23 +60,8 @@
           </button>
 
           <div class="slides-viewport">
-            <div class="hero-overlay">
-              <p class="hero-eyebrow">
-                <em>Interaktive Erkundung</em> von Bildung &amp; sozialer Klasse
-              </p>
-              <h1 class="hero-title">
-                <span class="title-solid">Sichtbarkeit</span>
-                <span class="title-outline">der Wege</span>
-              </h1>
-            </div>
-
             <!-- Slide 1: Stadt -->
             <figure class="slide is-active" data-slide="0">
-              <figcaption class="slide-caption">
-                <span class="slide-tag">Szene 01</span>
-                <strong>Die Stadt</strong>
-                <span class="slide-hint">Gymnasium</span>
-              </figcaption>
               <div class="scene" role="img" aria-label="Stadtansicht mit Gymnasium">
                 <img class="layer-base" src="img/1_bg.jpg" alt="Stadt ohne Gymnasium">
                 <img
@@ -60,11 +76,6 @@
 
             <!-- Slide 2: Kultur -->
             <figure class="slide" data-slide="1">
-              <figcaption class="slide-caption">
-                <span class="slide-tag">Szene 02</span>
-                <strong>Kultur &amp; Wissen</strong>
-                <span class="slide-hint">Museum · Konzerthaus · Forschungsinstitut</span>
-              </figcaption>
               <div class="scene" role="img" aria-label="Kulturviertel mit Museen und Konzerthäusern">
                 <svg class="scene-svg" viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
                   <defs>
@@ -108,11 +119,6 @@
 
             <!-- Slide 3: Beruf -->
             <figure class="slide" data-slide="2">
-              <figcaption class="slide-caption">
-                <span class="slide-tag">Szene 03</span>
-                <strong>Beruf &amp; Weiterbildung</strong>
-                <span class="slide-hint">Duale Hochschule · Meisterschule · Berufsakademie</span>
-              </figcaption>
               <div class="scene" role="img" aria-label="Berufsbildungslandschaft">
                 <svg class="scene-svg" viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
                   <defs>
@@ -186,13 +192,6 @@
         Alle Bildungsorte sind sichtbar.
       </p>
     </footer>
-
-    <section id="note" class="note">
-      <p>
-        Schiebe den Regler nach links — und beobachte, welche Bildungswege nach und nach verschwinden.
-        Die Szenen sind SVG-Platzhalter; später kannst du sie durch Schwarz-Weiß-Fotos ersetzen.
-      </p>
-    </section>
   </div>
 
   <script src="app.js"></script>
