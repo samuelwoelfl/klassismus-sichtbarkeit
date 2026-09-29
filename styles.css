@@ -15,7 +15,8 @@
   --font-serif: "Playfair Display", Georgia, serif;
   --font-ui: system-ui, -apple-system, "Segoe UI", sans-serif;
   --transition: 0.35s ease;
-  --scene-height: min(92vh, 1100px);
+  /* Bild etwas kleiner als der Viewport, damit Regler + Beginn der Informationsebene sichtbar bleiben */
+  --scene-height: clamp(360px, calc(100svh - 15rem), 1000px);
 }
 
 html {
@@ -148,7 +149,6 @@ body {
 
 .stage {
   width: 100%;
-  padding: 0 0 2rem;
 }
 
 .slide-texts {
@@ -221,7 +221,6 @@ body {
   position: relative;
   width: 100%;
   height: var(--scene-height);
-  min-height: 480px;
   overflow: hidden;
   background: var(--black);
 }
@@ -326,8 +325,7 @@ body {
   display: flex;
   gap: 0.6rem;
   justify-content: center;
-  margin-top: 1.5rem;
-  padding-bottom: 0.5rem;
+  margin-bottom: 0.9rem;
 }
 
 .slide-dots button {
@@ -350,14 +348,21 @@ body {
   outline-offset: 2px;
 }
 
-/* ── Slider (scrolls with page) ── */
+/* ── Slider: direkt unter dem Bild, klebt beim Lesen der Informationsebene oben ── */
+
+.controls-bar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: var(--black);
+  border-bottom: 1px solid rgba(233, 232, 31, 0.15);
+}
 
 .controls {
   width: 100%;
   max-width: 640px;
   margin: 0 auto;
-  padding: 2.5rem 1.5rem 4rem;
-  border-top: 1px solid rgba(233, 232, 31, 0.15);
+  padding: 1rem 1.5rem 0.75rem;
 }
 
 .class-labels {
@@ -425,7 +430,7 @@ body {
 }
 
 .visibility-status {
-  margin: 0.85rem 0 0;
+  margin: 0.6rem 0 0;
   text-align: center;
   font-family: var(--font-serif);
   font-size: 0.85rem;
@@ -434,11 +439,513 @@ body {
   min-height: 1.4em;
 }
 
+/* ── Platzhalter, solange kein Foto da ist ── */
+
+.scene-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  padding: 2rem;
+  background:
+    repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.025) 0 1px, transparent 1px 14px),
+    #0b0b0b;
+}
+
+.placeholder-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+  max-width: 60rem;
+}
+
+.placeholder-tile {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  width: 13rem;
+  padding: 1rem 1.1rem 1.1rem;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+}
+
+.placeholder-tile.layer-privilege {
+  border-color: var(--neon);
+}
+
+.placeholder-tile strong {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  line-height: 1.05;
+}
+
+.placeholder-kind {
+  font-size: 0.6rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--neon);
+}
+
+.placeholder-address {
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+.placeholder-note {
+  margin: 0;
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+/* ── Informationsebene ── */
+
+.info-layer {
+  max-width: 72rem;
+  margin: 0 auto;
+  padding: 2.25rem 1.5rem 5rem;
+}
+
+.info-head {
+  text-align: center;
+}
+
+.info-eyebrow,
+.card-kicker {
+  margin: 0 0 0.5rem;
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--neon);
+}
+
+.info-tier {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 5vw, 3.25rem);
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.info-income {
+  margin: 0.4rem 0 0;
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 1rem;
+  color: var(--muted);
+}
+
+#info-income {
+  color: var(--white);
+}
+
+.tier-steps {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  gap: 1px;
+  max-width: 48rem;
+  margin: 1.25rem auto 0;
+  background: rgba(233, 232, 31, 0.35);
+  border: 1px solid rgba(233, 232, 31, 0.35);
+}
+
+.tier-step {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  padding: 0.5rem 0.3rem;
+  border: none;
+  background: var(--black);
+  color: var(--muted);
+  font: inherit;
+  line-height: 1.25;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.tier-step-edu {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+.tier-step-income {
+  font-size: 0.65rem;
+}
+
+.tier-step:hover {
+  color: var(--white);
+}
+
+.tier-step.is-active {
+  background: var(--neon);
+  color: var(--black);
+}
+
+.tier-step:focus-visible {
+  outline: 2px solid var(--white);
+  outline-offset: 2px;
+}
+
+.info-intro {
+  max-width: 40rem;
+  margin: 1.75rem auto 2.25rem;
+  text-align: center;
+  font-family: var(--font-serif);
+  font-size: clamp(0.95rem, 2vw, 1.1rem);
+  font-style: italic;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1px;
+  background: rgba(233, 232, 31, 0.25);
+  border: 1px solid rgba(233, 232, 31, 0.25);
+}
+
+.info-card {
+  padding: 1.75rem 1.5rem;
+  background: var(--black);
+}
+
+.card-note {
+  margin: 1rem 0 0;
+  font-size: 0.75rem;
+  line-height: 1.5;
+  color: var(--muted);
+}
+
+.source-ref {
+  color: var(--neon-dim);
+  font-size: 0.7rem;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.source-ref:hover {
+  color: var(--neon);
+}
+
+/* 100 Kinder */
+
+.hero-figure {
+  margin: 0 0 1.25rem;
+  font-family: var(--font-serif);
+  font-size: 1.05rem;
+  line-height: 1.3;
+}
+
+.hero-number {
+  display: inline-block;
+  min-width: 2ch;
+  font-family: var(--font-display);
+  font-size: clamp(3.5rem, 8vw, 5.5rem);
+  line-height: 0.85;
+  color: var(--neon);
+  vertical-align: -0.1em;
+}
+
+/* Texte je Stufe übereinander: reserviert die Höhe des längsten, damit nichts springt */
+.tier-variants {
+  display: grid;
+}
+
+.tier-variant {
+  grid-area: 1 / 1;
+  visibility: hidden;
+}
+
+.tier-variant.is-active {
+  visibility: visible;
+}
+
+.dot-grid {
+  display: grid;
+  grid-template-columns: repeat(20, 1fr);
+  gap: 4px;
+  max-width: 26rem;
+}
+
+.dot-grid span {
+  aspect-ratio: 1;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  transition: background 0.3s ease, border-color 0.3s ease;
+}
+
+.dot-grid span.is-top {
+  border-color: var(--neon-dim);
+  border-style: dashed;
+}
+
+.dot-grid span.is-on {
+  background: var(--neon);
+  border-color: var(--neon);
+}
+
+/* Orte im Bild */
+
+.place-list,
+.fact-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.place {
+  padding: 0.9rem 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  transition: opacity var(--transition);
+}
+
+.place:first-child {
+  border-top: none;
+  padding-top: 0;
+}
+
+.place-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  column-gap: 0.6rem;
+}
+
+.place-kind {
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.place.is-privileged .place-kind {
+  color: var(--neon);
+}
+
+.place-name,
+.place-address {
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+.place.is-hidden {
+  opacity: 0.4;
+}
+
+.place.is-hidden .place-kind {
+  text-decoration: line-through;
+  text-decoration-color: var(--neon);
+}
+
+.place-metric {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.metric-bar {
+  position: relative;
+  flex: 1;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.metric-fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 0;
+  background: var(--white);
+  transition: width 0.35s ease;
+}
+
+.place.is-privileged .metric-fill {
+  background: var(--neon);
+}
+
+.metric-top {
+  position: absolute;
+  top: -4px;
+  bottom: -4px;
+  width: 2px;
+  margin-left: -1px;
+  background: var(--neon-dim);
+}
+
+.metric-value {
+  min-width: 3.2rem;
+  text-align: right;
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  line-height: 1;
+}
+
+.metric-caption {
+  margin: 0.3rem 0 0;
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+/* Bildungstrichter */
+
+.funnel {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.funnel-shape polygon {
+  fill: transparent;
+  stroke: var(--white);
+  stroke-width: 1.5;
+  stroke-dasharray: 5 4;
+  transition: fill 0.35s ease, stroke 0.35s ease;
+}
+
+/* Liegt die Kontur über der gefüllten (breiteren) Fläche, muss sie dunkel sein */
+.funnel[data-active="1"] .funnel-shape:not(.is-active) polygon {
+  stroke: var(--black);
+}
+
+.funnel-shape.is-active polygon {
+  fill: var(--neon);
+  stroke: none;
+}
+
+.funnel-label,
+.funnel-values {
+  font-family: var(--font-ui);
+  font-size: 18px;
+  dominant-baseline: middle;
+}
+
+.funnel-label {
+  fill: rgba(255, 255, 255, 0.8);
+}
+
+.funnel-value-active {
+  fill: var(--neon);
+  font-weight: 700;
+}
+
+.funnel-value-other {
+  fill: var(--muted);
+}
+
+/* Hintergrund-Fakten */
+
+.fact {
+  padding: 0.9rem 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.fact:first-child {
+  border-top: none;
+  padding-top: 0;
+}
+
+.fact-value {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 2.25rem;
+  line-height: 1;
+  color: var(--neon);
+}
+
+.fact-text {
+  margin: 0.35rem 0 0;
+  font-size: 0.85rem;
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* Quellen */
+
+.sources {
+  margin-top: 2rem;
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+.sources summary {
+  cursor: pointer;
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--white);
+}
+
+.sources ol {
+  margin: 0.75rem 0 0;
+  padding-left: 1.5rem;
+  line-height: 1.6;
+}
+
+.sources li:target {
+  color: var(--neon);
+}
+
+.sources a {
+  color: var(--neon);
+}
+
 /* ── Responsive ── */
 
 @media (max-width: 720px) {
   :root {
-    --scene-height: 78vh;
+    --scene-height: clamp(300px, calc(100svh - 17rem), 720px);
+  }
+
+  .info-layer {
+    padding: 1.75rem 1rem 4rem;
+  }
+
+  .info-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .info-card {
+    padding: 1.5rem 1rem;
+  }
+
+  .tier-steps {
+    grid-auto-flow: row;
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .funnel-label,
+  .funnel-values {
+    font-size: 24px;
+  }
+
+  .scene-placeholder {
+    padding: 1rem 3rem;
+  }
+
+  .placeholder-grid {
+    gap: 0.5rem;
+  }
+
+  .placeholder-tile {
+    width: calc(50% - 0.25rem);
+    padding: 0.6rem;
+  }
+
+  .placeholder-tile strong {
+    font-size: 1rem;
+  }
+
+  .placeholder-address {
+    display: none;
   }
 
   .top-bar {
@@ -482,8 +989,3 @@ body {
   }
 }
 
-@media (min-width: 1400px) {
-  :root {
-    --scene-height: min(94vh, 1200px);
-  }
-}

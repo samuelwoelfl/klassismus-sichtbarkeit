@@ -16,7 +16,7 @@
       <nav class="top-nav" aria-label="Hauptnavigation">
         <a href="#intro">Intro</a>
         <a href="#stage">Szenen</a>
-        <a href="#controls">Regler</a>
+        <a href="#info">Zahlen</a>
       </nav>
       <span class="lang-select" aria-hidden="true">DE</span>
     </header>
@@ -35,23 +35,7 @@
     </section>
 
     <main id="stage" class="stage" aria-live="polite">
-      <div class="slide-texts">
-        <figcaption class="slide-caption is-active" data-slide="0">
-          <span class="slide-tag">Szene 01</span>
-          <strong>Die Stadt</strong>
-          <span class="slide-hint">Gymnasium</span>
-        </figcaption>
-        <figcaption class="slide-caption" data-slide="1">
-          <span class="slide-tag">Szene 02</span>
-          <strong>Kultur &amp; Wissen</strong>
-          <span class="slide-hint">Museum · Konzerthaus · Forschungsinstitut</span>
-        </figcaption>
-        <figcaption class="slide-caption" data-slide="2">
-          <span class="slide-tag">Szene 03</span>
-          <strong>Beruf &amp; Weiterbildung</strong>
-          <span class="slide-hint">Duale Hochschule · Meisterschule · Berufsakademie</span>
-        </figcaption>
-      </div>
+      <div class="slide-texts"></div>
 
       <div class="hero-frame">
         <div class="slideshow">
@@ -60,101 +44,6 @@
           </button>
 
           <div class="slides-viewport">
-            <!-- Slide 1: Stadt -->
-            <figure class="slide is-active" data-slide="0">
-              <div class="scene" role="img" aria-label="Stadtansicht mit Gymnasium">
-                <img class="layer-base" src="img/1_bg.jpg" alt="Stadt ohne Gymnasium">
-                <img
-                  class="layer-privilege"
-                  src="img/gymnasium_1.png"
-                  alt="Gymnasium"
-                  data-order="0"
-                  data-label="Gymnasium"
-                >
-              </div>
-            </figure>
-
-            <!-- Slide 2: Kultur -->
-            <figure class="slide" data-slide="1">
-              <div class="scene" role="img" aria-label="Kulturviertel mit Museen und Konzerthäusern">
-                <svg class="scene-svg" viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
-                  <defs>
-                    <linearGradient id="sky2" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0%" stop-color="#a8c8e8"/>
-                      <stop offset="100%" stop-color="#e8d4c8"/>
-                    </linearGradient>
-                  </defs>
-                  <rect width="800" height="500" fill="url(#sky2)"/>
-                  <rect y="300" width="800" height="200" fill="#7a8a6a"/>
-                  <rect y="380" width="800" height="120" fill="#5a5a62"/>
-                  <g class="layer-base">
-                    <rect x="30" y="320" width="70" height="80" fill="#8b7355" rx="4"/>
-                    <rect x="700" y="310" width="80" height="90" fill="#8b7355" rx="4"/>
-                    <circle cx="400" cy="350" r="8" fill="#fbbf24"/>
-                  </g>
-                  <g class="layer-privilege" data-order="0" data-label="Forschungsinstitut">
-                    <rect x="520" y="160" width="160" height="240" fill="#cbd5e1" stroke="#475569"/>
-                    <rect x="540" y="130" width="120" height="35" fill="#334155"/>
-                    <text x="600" y="155" text-anchor="middle" font-size="10" fill="#f1f5f9" font-family="system-ui">FORSCHUNG</text>
-                    <rect x="560" y="200" width="30" height="40" fill="#60a5fa"/>
-                    <rect x="610" y="200" width="30" height="40" fill="#60a5fa"/>
-                    <text x="600" y="380" text-anchor="middle" font-size="11" fill="#334155" font-family="system-ui">Forschungsinstitut</text>
-                  </g>
-                  <g class="layer-privilege" data-order="1" data-label="Konzerthaus">
-                    <rect x="280" y="190" width="150" height="210" fill="#7c2d12" stroke="#451a03"/>
-                    <path d="M280,190 L355,120 L430,190" fill="#991b1b"/>
-                    <rect x="310" y="240" width="90" height="60" fill="#fcd34d" opacity="0.8"/>
-                    <text x="355" y="380" text-anchor="middle" font-size="11" fill="#451a03" font-family="system-ui">Konzerthaus</text>
-                  </g>
-                  <g class="layer-privilege" data-order="2" data-label="Museum">
-                    <rect x="60" y="170" width="170" height="230" fill="#f5f5f4" stroke="#78716c" stroke-width="3"/>
-                    <rect x="90" y="200" width="110" height="80" fill="#1c1917" opacity="0.15"/>
-                    <rect x="100" y="210" width="40" height="60" fill="#57534e"/>
-                    <rect x="150" y="210" width="40" height="60" fill="#57534e"/>
-                    <text x="145" y="380" text-anchor="middle" font-size="11" fill="#44403c" font-family="system-ui">Museum</text>
-                  </g>
-                </svg>
-              </div>
-            </figure>
-
-            <!-- Slide 3: Beruf -->
-            <figure class="slide" data-slide="2">
-              <div class="scene" role="img" aria-label="Berufsbildungslandschaft">
-                <svg class="scene-svg" viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
-                  <defs>
-                    <linearGradient id="sky3" x1="0" y1="0" x2="1" y2="1">
-                      <stop offset="0%" stop-color="#93c5fd"/>
-                      <stop offset="100%" stop-color="#fde68a"/>
-                    </linearGradient>
-                  </defs>
-                  <rect width="800" height="500" fill="url(#sky3)"/>
-                  <rect y="290" width="800" height="210" fill="#9ca88a"/>
-                  <rect y="370" width="800" height="130" fill="#6b7280"/>
-                  <g class="layer-base">
-                    <rect x="350" y="330" width="100" height="70" fill="#a8a29e"/>
-                    <text x="400" y="375" text-anchor="middle" font-size="10" fill="#44403c" font-family="system-ui">Öffentl. Schule</text>
-                    <rect x="50" y="350" width="200" height="15" fill="#57534e"/>
-                  </g>
-                  <g class="layer-privilege" data-order="0" data-label="Berufsakademie">
-                    <rect x="580" y="200" width="150" height="200" fill="#dbeafe" stroke="#2563eb"/>
-                    <text x="655" y="240" text-anchor="middle" font-size="12" fill="#1d4ed8" font-family="system-ui" font-weight="bold">BA</text>
-                    <text x="655" y="380" text-anchor="middle" font-size="11" fill="#1e40af" font-family="system-ui">Berufsakademie</text>
-                  </g>
-                  <g class="layer-privilege" data-order="1" data-label="Meisterschule">
-                    <rect x="350" y="210" width="130" height="190" fill="#fef3c7" stroke="#d97706"/>
-                    <rect x="370" y="250" width="90" height="50" fill="#f59e0b" opacity="0.4"/>
-                    <text x="415" y="380" text-anchor="middle" font-size="11" fill="#92400e" font-family="system-ui">Meisterschule</text>
-                  </g>
-                  <g class="layer-privilege" data-order="2" data-label="Duale Hochschule">
-                    <rect x="80" y="150" width="200" height="250" fill="#e0e7ff" stroke="#4338ca"/>
-                    <rect x="100" y="120" width="160" height="40" fill="#4338ca"/>
-                    <text x="180" y="148" text-anchor="middle" font-size="13" fill="#eef2ff" font-family="system-ui" font-weight="bold">DH</text>
-                    <text x="180" y="380" text-anchor="middle" font-size="11" fill="#3730a3" font-family="system-ui">Duale Hochschule</text>
-                  </g>
-                </svg>
-              </div>
-            </figure>
-
             <div class="grain" aria-hidden="true"></div>
           </div>
 
@@ -163,37 +52,81 @@
           </button>
         </div>
       </div>
-
-      <div class="slide-dots" role="tablist" aria-label="Bildauswahl"></div>
     </main>
 
-    <footer id="controls" class="controls">
-      <div class="class-labels">
-        <span class="label-low">Niedrige Klasse</span>
-        <span class="label-high">Hohe Klasse</span>
+    <section class="explore">
+      <div id="controls" class="controls-bar">
+        <div class="controls">
+          <div class="slide-dots" role="tablist" aria-label="Bildauswahl"></div>
+
+          <div class="class-labels">
+            <span class="label-low">Niedrige Klasse</span>
+            <span class="label-high">Hohe Klasse</span>
+          </div>
+
+          <div class="slider-wrap">
+            <input
+              type="range"
+              id="class-slider"
+              class="class-slider"
+              min="0"
+              max="100"
+              value="100"
+              aria-valuemin="0"
+              aria-valuemax="100"
+              aria-valuenow="100"
+              aria-label="Soziale Klasse: von niedriger zu hoher Klasse"
+            >
+          </div>
+
+          <p class="visibility-status" id="visibility-status" aria-live="polite"></p>
+        </div>
       </div>
 
-      <div class="slider-wrap">
-        <input
-          type="range"
-          id="class-slider"
-          class="class-slider"
-          min="0"
-          max="100"
-          value="100"
-          aria-valuemin="0"
-          aria-valuemax="100"
-          aria-valuenow="100"
-          aria-label="Soziale Klasse: von niedriger zu hoher Klasse"
-        >
-      </div>
+      <section id="info" class="info-layer" aria-labelledby="info-tier">
+        <header class="info-head">
+          <p class="info-eyebrow">Herkunft · Bildung und Einkommen der Eltern</p>
+          <h2 class="info-tier" id="info-tier"></h2>
+          <p class="info-income">Haushaltsnetto <span id="info-income"></span> im Monat</p>
+          <div class="tier-steps" role="group" aria-label="Herkunftsstufe wählen"></div>
+        </header>
 
-      <p class="visibility-status" id="visibility-status" aria-live="polite">
-        Alle Bildungsorte sind sichtbar.
-      </p>
-    </footer>
+        <p class="info-intro" id="info-intro"></p>
+
+        <div class="info-grid">
+          <article class="info-card card-hero">
+            <p class="card-kicker">Von 100 Kindern dieser Herkunft …</p>
+            <p class="hero-figure"><span class="hero-number" id="hero-number">0</span> <span id="hero-label"></span></p>
+            <div class="dot-grid" id="dot-grid" aria-hidden="true"></div>
+            <p class="card-note" id="hero-note"></p>
+          </article>
+
+          <article class="info-card card-places">
+            <p class="card-kicker">Orte in diesem Bild</p>
+            <ul class="place-list" id="place-list"></ul>
+          </article>
+
+          <article class="info-card card-funnel">
+            <p class="card-kicker">Bildungstrichter · von 100 Grundschulkindern</p>
+            <svg class="funnel" id="funnel" role="img" aria-label="Bildungstrichter"></svg>
+            <p class="card-note" id="funnel-note"></p>
+          </article>
+
+          <article class="info-card card-facts">
+            <p class="card-kicker">Hintergrund</p>
+            <ul class="fact-list" id="fact-list"></ul>
+          </article>
+        </div>
+
+        <details class="sources">
+          <summary>Quellen</summary>
+          <ol id="source-list"></ol>
+        </details>
+      </section>
+    </section>
   </div>
 
+  <script src="data.js"></script>
   <script src="app.js"></script>
 </body>
 </html>
