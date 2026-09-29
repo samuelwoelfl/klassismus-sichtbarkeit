@@ -156,32 +156,6 @@
             </figure>
 
             <div class="grain" aria-hidden="true"></div>
-
-            <div id="controls" class="controls">
-              <div class="class-labels">
-                <span class="label-low">Niedrige Klasse</span>
-                <span class="label-high">Hohe Klasse</span>
-              </div>
-
-              <div class="slider-wrap">
-                <input
-                  type="range"
-                  id="class-slider"
-                  class="class-slider"
-                  min="0"
-                  max="100"
-                  value="100"
-                  aria-valuemin="0"
-                  aria-valuemax="100"
-                  aria-valuenow="100"
-                  aria-label="Soziale Klasse: von niedriger zu hoher Klasse"
-                >
-              </div>
-
-              <p class="visibility-status" id="visibility-status" aria-live="polite">
-                Alle Bildungsorte sind sichtbar.
-              </p>
-            </div>
           </div>
 
           <button type="button" class="nav nav-next" aria-label="Nächstes Bild">
@@ -192,6 +166,32 @@
 
       <div class="slide-dots" role="tablist" aria-label="Bildauswahl"></div>
     </main>
+
+    <footer id="controls" class="controls">
+      <div class="class-labels">
+        <span class="label-low">Niedrige Klasse</span>
+        <span class="label-high">Hohe Klasse</span>
+      </div>
+
+      <div class="slider-wrap">
+        <input
+          type="range"
+          id="class-slider"
+          class="class-slider"
+          min="0"
+          max="100"
+          value="100"
+          aria-valuemin="0"
+          aria-valuemax="100"
+          aria-valuenow="100"
+          aria-label="Soziale Klasse: von niedriger zu hoher Klasse"
+        >
+      </div>
+
+      <p class="visibility-status" id="visibility-status" aria-live="polite">
+        Alle Bildungsorte sind sichtbar.
+      </p>
+    </footer>
   </div>
 
   <script src="app.js"></script>

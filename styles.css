@@ -281,24 +281,6 @@ body {
   background-size: 180px 180px;
 }
 
-/* Slider on image */
-
-.controls {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 5;
-  padding: 2rem 1.5rem 1.25rem;
-  background: linear-gradient(
-    to top,
-    rgba(0, 0, 0, 0.92) 0%,
-    rgba(0, 0, 0, 0.65) 55%,
-    transparent 100%
-  );
-  pointer-events: auto;
-}
-
 .layer-privilege {
   transition: opacity var(--transition);
 }
@@ -368,6 +350,16 @@ body {
   outline-offset: 2px;
 }
 
+/* ── Slider (scrolls with page) ── */
+
+.controls {
+  width: 100%;
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 2.5rem 1.5rem 4rem;
+  border-top: 1px solid rgba(233, 232, 31, 0.15);
+}
+
 .class-labels {
   display: flex;
   justify-content: space-between;
@@ -433,14 +425,13 @@ body {
 }
 
 .visibility-status {
-  margin: 0.65rem 0 0;
+  margin: 0.85rem 0 0;
   text-align: center;
   font-family: var(--font-serif);
-  font-size: 0.8rem;
+  font-size: 0.85rem;
   font-style: italic;
-  color: rgba(255, 255, 255, 0.75);
-  min-height: 1.35em;
-  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.8);
+  color: var(--muted);
+  min-height: 1.4em;
 }
 
 /* ── Responsive ── */
@@ -488,10 +479,6 @@ body {
   .nav-next {
     right: 0;
     border-left: 1px solid rgba(233, 232, 31, 0.3);
-  }
-
-  .controls {
-    padding: 1.5rem 1rem 1rem;
   }
 }
 
