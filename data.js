@@ -162,9 +162,9 @@ window.KLASSISMUS_DATA = {
       hero: 'gymnasium',
       institutions: [
         { name: 'St.-Georg-Mittelschule', address: 'Auf dem Kreuz 25', kind: 'Mittelschule', metric: 'mittelschule' },
-        { name: 'Welserschule', address: 'Jesuitengasse 14', kind: 'Kaufm. Berufsschule' },
         { name: 'Agnes-Bernauer-Realschule', address: 'Auf dem Kreuz 36', kind: 'Realschule', metric: 'realschule', fades: 'zugespitzt' },
         { name: 'Jakob-Fugger-Gymnasium', address: 'Kriemhildenstraße 5', kind: 'Gymnasium', metric: 'gymnasium', fades: true, img: 'img/gymnasium_1.png', label: [42.7, 35] },
+        { name: 'Welserschule', address: 'Jesuitengasse 14', kind: 'Kaufm. Berufsschule' },
       ],
       facts: [
         { value: '46 : 83', text: 'Von je 100 Kindern erreichen 46 aus Nicht-Akademiker- und 83 aus Akademikerfamilien die gymnasiale Oberstufe.', source: 'dzhw2018' },

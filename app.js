@@ -57,7 +57,7 @@
 
   /* ── Szenen aufbauen ── */
 
-  /** Ausblendbare Elemente (Bild, Silhouette, Label, Kachel) → ihre Einrichtung */
+  /** Ausblendbare Elemente (Bild, Label, Kachel) → ihre Einrichtung */
   const fadingInst = new WeakMap();
 
   function buildScene(scene) {
@@ -78,14 +78,7 @@
           layer.src = inst.img;
           layer.alt = inst.name;
           wrap.appendChild(layer);
-          if (inst.fades) {
-            fadingInst.set(layer, inst);
-            // Neon-Silhouette, die beim Verschwinden kurz aufleuchtet
-            const ghost = el('div', 'layer-privilege layer-ghost');
-            ghost.style.setProperty('--mask', `url("${inst.img}")`);
-            fadingInst.set(ghost, inst);
-            wrap.appendChild(ghost);
-          }
+          if (inst.fades) fadingInst.set(layer, inst);
         }
         if (inst.label) {
           const tag = el('span', 'scene-label');
@@ -195,7 +188,7 @@
     return clamp01((getMetricAt(inst.metric, value) - gone) / (full - gone));
   }
 
-  /** Setzt `--v` (0–1); Deckkraft, Unschärfe und Silhouette leiten sich per CSS davon ab */
+  /** Setzt `--v` (0–1); Deckkraft und Unschärfe leiten sich per CSS davon ab */
   function updatePrivilegeLayers(slideEl, sliderValue) {
     slideEl.querySelectorAll('.layer-privilege').forEach((layer) => {
       const inst = fadingInst.get(layer);

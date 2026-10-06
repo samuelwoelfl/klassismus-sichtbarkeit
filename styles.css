@@ -364,11 +364,7 @@ body {
   background-size: 180px 180px;
 }
 
-/*
- * Ausblenden: JS setzt nur --v (1 = sichtbar, 0 = weg). Das Gebäude löst sich in
- * Unschärfe auf, dabei leuchtet seine Silhouette kurz als neonfarbene Schraffur auf
- * und bleibt als schwache Leerstelle zurück (--ghost-rest, 0 = ganz weg).
- */
+/* Ausblenden: JS setzt nur --v (1 = sichtbar, 0 = weg), das Gebäude löst sich in Unschärfe auf */
 @property --v {
   syntax: '<number>';
   inherits: false;
@@ -376,24 +372,12 @@ body {
 }
 
 .layer-privilege {
-  --ghost-rest: 0.06;
   opacity: var(--v);
   transition: --v 0.6s ease;
 }
 
 .scene img.layer-privilege {
   filter: var(--photo-filter) blur(calc((1 - var(--v)) * 6px));
-  transform: scale(calc(1 + (1 - var(--v)) * 0.02));
-}
-
-.layer-ghost {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background: repeating-linear-gradient(-45deg, var(--neon) 0 2px, transparent 2px 7px);
-  -webkit-mask: var(--mask) center / cover no-repeat;
-  mask: var(--mask) center / cover no-repeat;
-  opacity: calc(var(--ghost-rest) * (1 - var(--v)) + var(--v) * (1 - var(--v)) * 1.4);
   transform: scale(calc(1 + (1 - var(--v)) * 0.02));
 }
 
@@ -717,7 +701,7 @@ body {
 
 .info-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: minmax(0, 1fr);
   gap: 1px;
   background: rgba(233, 232, 31, 0.25);
   border: 1px solid rgba(233, 232, 31, 0.25);
@@ -1019,6 +1003,200 @@ body {
 
 .sources a {
   color: var(--neon);
+}
+
+/* Kacheln untereinander über die volle Breite: Inhalte darin nebeneinander */
+@media (min-width: 721px) {
+  /* Jede Kachel wie eine eigene Folie: eigener Rahmen, viel Luft, Inhalt mittig */
+  .info-grid {
+    gap: 4rem;
+    background: none;
+    border: none;
+  }
+
+  .info-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: min(70svh, 36rem);
+    padding: 4rem 4rem;
+    border: 1px solid rgba(233, 232, 31, 0.25);
+  }
+
+  .card-kicker {
+    margin-bottom: 2rem;
+    font-size: 0.75rem;
+  }
+
+  /* Folientitel statt kleiner Kicker */
+  .info-card .card-kicker {
+    margin-bottom: 2.5rem;
+    font-family: var(--font-display);
+    font-size: 1.9rem;
+    font-weight: 400;
+    letter-spacing: 0.05em;
+  }
+
+  /* 100 Kinder als großes 10 × 10-Feld */
+  .card-hero .dot-grid {
+    grid-template-columns: repeat(10, 1fr);
+    gap: 6px;
+    width: 100%;
+    max-width: 24rem;
+    justify-self: end;
+  }
+
+  .card-hero .card-note {
+    max-width: 26rem;
+    font-size: 0.85rem;
+  }
+
+  /* Orte: Schulart groß, Name und Adresse darunter, kräftige Balken */
+  .place-head {
+    flex-direction: column;
+    align-items: flex-start;
+    row-gap: 0.2rem;
+  }
+
+  .place-kind {
+    font-family: var(--font-display);
+    font-size: 2.1rem;
+    font-weight: 400;
+    letter-spacing: 0.03em;
+    line-height: 1;
+  }
+
+  .place-name,
+  .place-address {
+    font-size: 0.85rem;
+  }
+
+  .place-metric {
+    margin-top: 1.5rem;
+  }
+
+  .metric-bar {
+    height: 12px;
+  }
+
+  .metric-top {
+    top: -6px;
+    bottom: -6px;
+  }
+
+  .metric-value {
+    min-width: 4.5rem;
+    font-size: 2.4rem;
+  }
+
+  .metric-caption,
+  .place-note {
+    font-size: 0.85rem;
+    line-height: 1.5;
+  }
+
+  /* Trichter groß über die Folienbreite, Erklärung darunter */
+  .card-funnel {
+    display: grid;
+    align-content: center;
+    grid-template-columns: minmax(0, 1fr);
+    justify-items: center;
+    row-gap: 2rem;
+  }
+
+  .card-funnel .card-kicker {
+    justify-self: start;
+  }
+
+  .card-funnel .funnel {
+    width: min(100%, 46rem);
+  }
+
+  .card-funnel .card-note {
+    max-width: 40rem;
+    margin: 0;
+    text-align: center;
+  }
+
+  .card-funnel .card-note {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 1.05rem;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.75);
+  }
+
+  /* Größere Schlüsselzahlen, damit die Folien nicht leer wirken */
+  .card-hero .hero-number {
+    font-size: clamp(6rem, 11vw, 10rem);
+  }
+
+  .card-hero .hero-figure {
+    font-size: 1.35rem;
+  }
+
+  /* Text unter die große Zahl statt daneben umbrechen */
+  .card-hero #hero-label {
+    display: block;
+    margin-top: 0.6rem;
+  }
+
+  .fact-value {
+    font-size: clamp(2.75rem, 3.6vw, 3.4rem);
+    white-space: nowrap;
+  }
+
+  .fact-text {
+    margin-top: 1rem;
+    font-size: 1.05rem;
+    line-height: 1.6;
+  }
+
+  .card-hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr);
+    grid-template-areas:
+      'kicker kicker'
+      'figure dots'
+      'note   dots';
+    grid-template-rows: auto auto 1fr;
+    column-gap: 4rem;
+    align-content: center;
+    align-items: start;
+  }
+
+  .card-hero .card-kicker { grid-area: kicker; }
+  .card-hero .hero-figure { grid-area: figure; }
+  .card-hero .card-note { grid-area: note; }
+
+  .card-hero .dot-grid {
+    grid-area: dots;
+    max-width: none;
+    align-self: center;
+  }
+
+  /* Orte und Fakten als Spalten mit Trennlinien */
+  .place-list,
+  .fact-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+  }
+
+  .place,
+  .place:first-child,
+  .fact,
+  .fact:first-child {
+    padding: 0 2rem;
+    border-top: none;
+    border-left: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .place:first-child,
+  .fact:first-child {
+    padding-left: 0;
+    border-left: none;
+  }
+
 }
 
 /* ── Responsive ── */
