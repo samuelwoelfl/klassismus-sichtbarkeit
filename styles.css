@@ -772,12 +772,13 @@ body {
 
 .dot-grid span {
   aspect-ratio: 1;
-  border: 1px solid rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(233, 232, 31, 0.65);
   transition: background 0.3s ease, border-color 0.3s ease;
 }
 
+/* Wäre in der obersten Stufe gefüllt */
 .dot-grid span.is-top {
-  border-color: var(--neon-dim);
+  border-color: var(--neon);
   border-style: dashed;
 }
 
