@@ -40,8 +40,8 @@ window.KLASSISMUS_DATA = {
   fade: {
     gone: 20,
     full: 60,
-    // `fades: 'zugespitzt'`: bewusst plakativ nach Reglerposition (weg bei 4, voll ab 20) —
-    // die Informationsebene weist darauf hin, dass die Daten das nicht so zeigen.
+    // `fades: 'zugespitzt'`: bewusst plakativ nach Reglerposition (weg bei 4, voll ab 20).
+    // Die Informationsebene weist darauf hin, dass die Daten das nicht so zeigen.
     zugespitzt: [4, 20],
   },
 
@@ -174,7 +174,7 @@ window.KLASSISMUS_DATA = {
     {
       title: 'Tannenstraße',
       place: 'Fürth · Innenstadt',
-      intro: 'Mittelschule, Realschule und Gymnasium stehen hier Wand an Wand. Nach der vierten Klasse werden die Kinder auf drei Gebäude verteilt — und in welches sie gehen, folgt deutlich dem Elternhaus.',
+      intro: 'Mittelschule, Realschule und Gymnasium stehen hier Wand an Wand. Nach der vierten Klasse werden die Kinder auf drei Gebäude verteilt. In welches sie gehen, folgt deutlich dem Elternhaus.',
       base: 'img/4_bg.jpg',
       hero: 'gymnasium',
       institutions: [
@@ -185,13 +185,13 @@ window.KLASSISMUS_DATA = {
       facts: [
         { value: '5,9 %', text: 'der Eltern von Gymnasiast*innen haben höchstens einen Hauptschulabschluss. An Hauptschulen sind es 41,7 %.', source: 'bpb2019' },
         { value: '16,9 % → 40 %', text: 'Ohne Abitur in der Familie hängt es besonders am Geld: Mit steigendem Einkommen wächst die Gymnasialquote auf mehr als das Doppelte.', source: 'chancenmonitor2026' },
-        { value: '67,1 %', text: 'der Eltern von Gymnasiast*innen haben selbst (Fach-)Abitur — deutlich mehr als im Schnitt aller Schularten.', source: 'bpb2019' },
+        { value: '67,1 %', text: 'der Eltern von Gymnasiast*innen haben selbst (Fach-)Abitur. Das ist deutlich mehr als im Schnitt aller Schularten.', source: 'bpb2019' },
       ],
     },
     {
       title: 'Oettingenstraße',
       place: 'München · Lehel · am Englischen Garten',
-      intro: 'Die Helen-Keller-Realschule und das Institut für Informatik der LMU liegen Wand an Wand am Englischen Garten. Wer auf dem Schulhof steht, sieht die Uni — ob der Weg dorthin führt, hängt stark vom Elternhaus ab.',
+      intro: 'Die Helen-Keller-Realschule und das Institut für Informatik der LMU liegen Wand an Wand am Englischen Garten. Wer auf dem Schulhof steht, sieht die Uni. Ob der Weg dorthin führt, hängt stark vom Elternhaus ab.',
       base: 'img/2_bg.jpg',
       hero: 'studium',
       institutions: [
@@ -200,14 +200,14 @@ window.KLASSISMUS_DATA = {
       ],
       facts: [
         { value: '79 : 27', text: 'Von je 100 Kindern beginnen 79 aus Akademiker- und 27 aus Nicht-Akademikerfamilien ein Studium.', source: 'dzhw2018' },
-        { value: '22 % : 9 %', text: 'der Studienanfänger*innen aus Nicht-Akademiker- bzw. Akademikerfamilien kommen ohne gymnasiales Abitur an die Hochschule — etwa über Realschule, Ausbildung und Berufsoberschule.', source: 'stifterverband2021' },
+        { value: '22 % : 9 %', text: 'der Studienanfänger*innen aus Nicht-Akademiker- bzw. Akademikerfamilien kommen ohne gymnasiales Abitur an die Hochschule, etwa über Realschule, Ausbildung und Berufsoberschule.', source: 'stifterverband2021' },
         { value: '56 %', text: 'aller Studierenden haben mindestens ein Elternteil mit Hochschulabschluss.', source: 'sozialerhebung2021' },
       ],
     },
     {
       title: 'Campus Deutz',
       place: 'Köln · Deutz · Betzdorfer Straße',
-      intro: 'Das Hans-Böckler-Berufskolleg und der Campus Deutz der TH Köln liegen nur einen Parkplatz auseinander. Am Berufskolleg lässt sich die Fachhochschulreife erwerben — wie viele danach über den Platz ins Studium gehen, hängt stark vom Elternhaus ab.',
+      intro: 'Das Hans-Böckler-Berufskolleg und der Campus Deutz der TH Köln liegen nur einen Parkplatz auseinander. Am Berufskolleg lässt sich die Fachhochschulreife erwerben. Wie viele danach über den Platz ins Studium gehen, hängt stark vom Elternhaus ab.',
       base: 'img/3_bg.jpg',
       hero: 'studium',
       institutions: [
@@ -215,7 +215,7 @@ window.KLASSISMUS_DATA = {
         { name: 'TH Köln, Campus Deutz', address: 'Betzdorfer Straße 2', kind: 'Hochschule', metric: 'studium', fades: true, img: 'img/3_th-koeln.png', label: [24, 42] },
       ],
       facts: [
-        { value: '22 % : 9 %', text: 'der Studienanfänger*innen aus Nicht-Akademiker- bzw. Akademikerfamilien kommen ohne gymnasiales Abitur an die Hochschule — etwa über Ausbildung, Berufskolleg oder Berufsoberschule.', source: 'stifterverband2021' },
+        { value: '22 % : 9 %', text: 'der Studienanfänger*innen aus Nicht-Akademiker- bzw. Akademikerfamilien kommen ohne gymnasiales Abitur an die Hochschule, etwa über Ausbildung, Berufskolleg oder Berufsoberschule.', source: 'stifterverband2021' },
         { value: '79 : 27', text: 'Von je 100 Kindern beginnen 79 aus Akademiker- und 27 aus Nicht-Akademikerfamilien ein Studium.', source: 'dzhw2018' },
         { value: '56 %', text: 'aller Studierenden haben mindestens ein Elternteil mit Hochschulabschluss.', source: 'sozialerhebung2021' },
       ],

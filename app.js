@@ -379,7 +379,7 @@
         );
         li.appendChild(caption);
       } else {
-        li.appendChild(el('p', 'metric-caption', 'Bleibt sichtbar — für alle erreichbar.'));
+        li.appendChild(el('p', 'metric-caption', 'Bleibt sichtbar und ist für alle erreichbar.'));
       }
       if (inst.fades === 'zugespitzt') {
         li.appendChild(
