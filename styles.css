@@ -15,6 +15,7 @@
   --font-serif: "Playfair Display", Georgia, serif;
   --font-ui: system-ui, -apple-system, "Segoe UI", sans-serif;
   --transition: 0.35s ease;
+  --photo-filter: grayscale(100%) contrast(1.2) brightness(0.82);
   /* Bild etwas kleiner als der Viewport, damit Regler + Beginn der Informationsebene sichtbar bleiben */
   --scene-height: clamp(360px, calc(100svh - 15rem), 1000px);
 }
@@ -36,54 +37,6 @@ body {
 .page-shell {
   display: block;
   min-height: auto;
-}
-
-/* ── Top bar ── */
-
-.top-bar {
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
-  align-items: center;
-  padding: 1rem 1.5rem;
-  border-bottom: 1px solid rgba(233, 232, 31, 0.25);
-}
-
-.logo-box {
-  justify-self: start;
-  padding: 0.35rem 0.6rem;
-  border: 1px solid var(--white);
-  font-size: 0.65rem;
-  font-weight: 700;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  line-height: 1.2;
-}
-
-.top-nav {
-  display: flex;
-  gap: 1.75rem;
-  justify-self: center;
-}
-
-.top-nav a {
-  color: var(--white);
-  text-decoration: none;
-  font-size: 0.7rem;
-  font-weight: 600;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  transition: color 0.2s;
-}
-
-.top-nav a:hover {
-  color: var(--neon);
-}
-
-.lang-select {
-  justify-self: end;
-  font-size: 0.7rem;
-  letter-spacing: 0.1em;
-  color: var(--muted);
 }
 
 /* ── Intro (above image) ── */
@@ -253,7 +206,7 @@ body {
   display: block;
   object-fit: cover;
   object-position: center;
-  filter: grayscale(100%) contrast(1.2) brightness(0.82);
+  filter: var(--photo-filter);
 }
 
 .scene img {
@@ -265,8 +218,139 @@ body {
   z-index: 0;
 }
 
+.scene .layer-static,
 .scene .layer-privilege {
   z-index: 1;
+}
+
+/* Hinweis auf die Informationsebene unten im Bild */
+.scroll-hint {
+  position: absolute;
+  left: 50%;
+  bottom: 1rem;
+  z-index: 4;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+  padding: 0.5rem 0.9rem;
+  background: var(--black);
+  border: 1px solid var(--neon);
+  color: var(--neon);
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  letter-spacing: 0.06em;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.scroll-hint-text {
+  display: grid;
+}
+
+/* Beide Texte im selben Feld, damit die Breite beim Wechsel nicht springt */
+.hint-start,
+.hint-why {
+  grid-area: 1 / 1;
+  text-align: center;
+  transition: opacity var(--transition);
+}
+
+.hint-why,
+.scroll-hint.is-why .hint-start {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.scroll-hint.is-why .hint-why {
+  opacity: 1;
+  visibility: visible;
+}
+
+.scroll-hint:hover,
+.scroll-hint:focus-visible {
+  background: var(--neon);
+  color: var(--black);
+}
+
+.scroll-hint-arrow {
+  font-family: var(--font-ui);
+  font-size: 1rem;
+  line-height: 1;
+  animation: hint-bob 1.6s ease-in-out infinite;
+}
+
+@keyframes hint-bob {
+  0%, 100% { transform: translateY(-2px); }
+  50% { transform: translateY(3px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scroll-hint-arrow {
+    animation: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .scroll-hint {
+    bottom: 0.6rem;
+    font-size: 0.9rem;
+    padding: 0.4rem 0.7rem;
+  }
+}
+
+/* Gebäude-Labels: Spitze zeigt auf den Punkt in `label: [x, y]` */
+.scene-labels {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.scene-label {
+  position: absolute;
+  transform: translate(-50%, calc(-100% - 10px));
+  display: flex;
+  flex-direction: column;
+  padding: 0.35rem 0.6rem;
+  background: var(--black);
+  color: var(--white);
+  border: 1px solid var(--white);
+  white-space: nowrap;
+  line-height: 1.15;
+}
+
+.scene-label::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 100%;
+  width: 1px;
+  height: 10px;
+  background: currentColor;
+}
+
+.scene-label strong {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 1.15rem;
+  letter-spacing: 0.04em;
+}
+
+.scene-label span {
+  font-size: 0.7rem;
+  color: var(--muted);
+}
+
+@media (max-width: 640px) {
+  .scene-label span {
+    display: none;
+  }
+
+  .scene-label strong {
+    font-size: 0.95rem;
+  }
 }
 
 .grain {
@@ -280,12 +364,37 @@ body {
   background-size: 180px 180px;
 }
 
-.layer-privilege {
-  transition: opacity var(--transition);
+/*
+ * Ausblenden: JS setzt nur --v (1 = sichtbar, 0 = weg). Das Gebäude löst sich in
+ * Unschärfe auf, dabei leuchtet seine Silhouette kurz als neonfarbene Schraffur auf
+ * und bleibt als schwache Leerstelle zurück (--ghost-rest, 0 = ganz weg).
+ */
+@property --v {
+  syntax: '<number>';
+  inherits: false;
+  initial-value: 1;
 }
 
-.layer-privilege.is-fading {
-  filter: blur(0.4px);
+.layer-privilege {
+  --ghost-rest: 0.06;
+  opacity: var(--v);
+  transition: --v 0.6s ease;
+}
+
+.scene img.layer-privilege {
+  filter: var(--photo-filter) blur(calc((1 - var(--v)) * 6px));
+  transform: scale(calc(1 + (1 - var(--v)) * 0.02));
+}
+
+.layer-ghost {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(-45deg, var(--neon) 0 2px, transparent 2px 7px);
+  -webkit-mask: var(--mask) center / cover no-repeat;
+  mask: var(--mask) center / cover no-repeat;
+  opacity: calc(var(--ghost-rest) * (1 - var(--v)) + var(--v) * (1 - var(--v)) * 1.4);
+  transform: scale(calc(1 + (1 - var(--v)) * 0.02));
 }
 
 /* Navigation */
@@ -735,6 +844,13 @@ body {
   color: var(--muted);
 }
 
+.place-note {
+  margin: 0.25rem 0 0;
+  font-size: 0.72rem;
+  font-style: italic;
+  color: var(--muted);
+}
+
 .place.is-hidden {
   opacity: 0.4;
 }
@@ -768,6 +884,13 @@ body {
 
 .place.is-privileged .metric-fill {
   background: var(--neon);
+}
+
+/* Verblass-Bereich: links weg, rechts voll sichtbar */
+.metric-fade {
+  position: absolute;
+  inset: 0 auto 0 0;
+  background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.22));
 }
 
 .metric-top {
@@ -945,21 +1068,6 @@ body {
   }
 
   .placeholder-address {
-    display: none;
-  }
-
-  .top-bar {
-    grid-template-columns: 1fr auto;
-    gap: 0.75rem;
-  }
-
-  .top-nav {
-    grid-column: 1 / -1;
-    justify-self: center;
-    gap: 1.25rem;
-  }
-
-  .lang-select {
     display: none;
   }
 

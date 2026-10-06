@@ -1,6 +1,7 @@
 (function () {
   const DATA = window.KLASSISMUS_DATA;
   const slider = document.getElementById('class-slider');
+  const scrollHint = document.querySelector('.scroll-hint');
   const statusEl = document.getElementById('visibility-status');
   const viewport = document.querySelector('.slides-viewport');
   const captionsEl = document.querySelector('.slide-texts');
@@ -56,6 +57,9 @@
 
   /* ── Szenen aufbauen ── */
 
+  /** Ausblendbare Elemente (Bild, Silhouette, Label, Kachel) → ihre Einrichtung */
+  const fadingInst = new WeakMap();
+
   function buildScene(scene) {
     const wrap = el('div', 'scene');
     wrap.setAttribute('role', 'img');
@@ -66,15 +70,38 @@
       base.src = scene.base;
       base.alt = '';
       wrap.appendChild(base);
+      const labels = el('div', 'scene-labels');
+      labels.setAttribute('aria-hidden', 'true');
       scene.institutions.forEach((inst) => {
-        if (!inst.img) return;
-        const layer = el('img', 'layer-privilege');
-        layer.src = inst.img;
-        layer.alt = inst.name;
-        layer.dataset.order = inst.order ?? 0;
-        layer.dataset.label = inst.name;
-        wrap.appendChild(layer);
+        if (inst.img) {
+          const layer = el('img', inst.fades ? 'layer-privilege' : 'layer-static');
+          layer.src = inst.img;
+          layer.alt = inst.name;
+          wrap.appendChild(layer);
+          if (inst.fades) {
+            fadingInst.set(layer, inst);
+            // Neon-Silhouette, die beim Verschwinden kurz aufleuchtet
+            const ghost = el('div', 'layer-privilege layer-ghost');
+            ghost.style.setProperty('--mask', `url("${inst.img}")`);
+            fadingInst.set(ghost, inst);
+            wrap.appendChild(ghost);
+          }
+        }
+        if (inst.label) {
+          const tag = el('span', 'scene-label');
+          tag.appendChild(el('strong', null, inst.kind));
+          tag.appendChild(el('span', null, inst.name));
+          tag.dataset.x = inst.label[0];
+          tag.dataset.y = inst.label[1];
+          if (inst.fades) {
+            tag.classList.add('layer-privilege');
+            fadingInst.set(tag, inst);
+          }
+          labels.appendChild(tag);
+        }
       });
+      wrap.appendChild(labels);
+      base.addEventListener('load', () => positionLabels(wrap));
       return wrap;
     }
 
@@ -86,16 +113,37 @@
       tile.appendChild(el('span', 'placeholder-kind', inst.kind));
       tile.appendChild(el('strong', null, inst.name));
       tile.appendChild(el('span', 'placeholder-address', inst.address));
-      if (inst.order != null) {
+      if (inst.fades) {
         tile.classList.add('layer-privilege');
-        tile.dataset.order = inst.order;
-        tile.dataset.label = inst.name;
+        fadingInst.set(tile, inst);
       }
       grid.appendChild(tile);
     });
     wrap.appendChild(grid);
     wrap.appendChild(el('p', 'placeholder-note', 'Foto folgt'));
     return wrap;
+  }
+
+  /**
+   * Labels sitzen in Foto-Prozent (`label: [x, y]`). Weil das Foto per object-fit: cover
+   * beschnitten wird, rechnen wir die Position auf den sichtbaren Ausschnitt um.
+   */
+  function positionLabels(sceneEl) {
+    const base = sceneEl.querySelector('.layer-base');
+    if (!base || !base.naturalWidth) return;
+    const cw = sceneEl.clientWidth;
+    const ch = sceneEl.clientHeight;
+    const scale = Math.max(cw / base.naturalWidth, ch / base.naturalHeight);
+    const offsetX = (cw - base.naturalWidth * scale) / 2;
+    const offsetY = (ch - base.naturalHeight * scale) / 2;
+    sceneEl.querySelectorAll('.scene-label').forEach((tag) => {
+      const x = offsetX + (tag.dataset.x / 100) * base.naturalWidth * scale;
+      const y = offsetY + (tag.dataset.y / 100) * base.naturalHeight * scale;
+      // Im sichtbaren Bereich halten, falls das Gebäude angeschnitten ist
+      const half = tag.offsetWidth / 2;
+      tag.style.left = `${Math.min(cw - half - 8, Math.max(half + 8, x))}px`;
+      tag.style.top = `${Math.min(ch - 8, Math.max(tag.offsetHeight + 8, y))}px`;
+    });
   }
 
   function buildSlides() {
@@ -119,29 +167,39 @@
 
   /* ── Ebenen ein-/ausblenden ── */
 
-  /** @param {number} value 0 = niedrige Klasse, 100 = hohe Klasse */
-  function getLayerOpacity(layerOrder, totalLayers, value) {
-    const t = (100 - value) / 100;
-    const segmentSize = 1 / totalLayers;
-    const start = layerOrder * segmentSize;
-    const end = (layerOrder + 1) * segmentSize;
-
-    if (t <= start) return 1;
-    if (t >= end) return 0;
-    return 1 - (t - start) / segmentSize;
+  /**
+   * Kennzahl stufenlos am Regler: linear zwischen den Stufenmitten, an den Rändern konstant.
+   * @param {number} value 0 = niedrige Klasse, 100 = hohe Klasse
+   */
+  function getMetricAt(metricKey, value) {
+    const values = DATA.metrics[metricKey].values;
+    const pos = Math.min(values.length - 1, Math.max(0, (value / 100) * values.length - 0.5));
+    const i = Math.floor(pos);
+    const next = Math.min(values.length - 1, i + 1);
+    return values[i] + (values[next] - values[i]) * (pos - i);
   }
 
-  /** Anzahl unterschiedlicher `order`-Stufen einer Szene — Bild und Info nutzen dieselbe Zählung. */
-  function getLayerCount(scene) {
-    return new Set(scene.institutions.filter((i) => i.order != null).map((i) => i.order)).size;
+  const clamp01 = (n) => Math.min(1, Math.max(0, n));
+
+  /**
+   * Sichtbarkeit 0–1 einer Einrichtung.
+   * - `fades: true`: nach Kennzahl — voll ab `fade.full` %, ganz weg bei `fade.gone` %
+   * - `fades: 'zugespitzt'`: nach Reglerposition (`fade.zugespitzt`), unabhängig von den Daten
+   */
+  function getVisibility(inst, value) {
+    if (inst.fades === 'zugespitzt') {
+      const [gone, full] = DATA.fade.zugespitzt;
+      return clamp01((value - gone) / (full - gone));
+    }
+    const { gone, full } = DATA.fade;
+    return clamp01((getMetricAt(inst.metric, value) - gone) / (full - gone));
   }
 
-  function updatePrivilegeLayers(slideEl, total, sliderValue) {
+  /** Setzt `--v` (0–1); Deckkraft, Unschärfe und Silhouette leiten sich per CSS davon ab */
+  function updatePrivilegeLayers(slideEl, sliderValue) {
     slideEl.querySelectorAll('.layer-privilege').forEach((layer) => {
-      const order = parseInt(layer.dataset.order, 10) || 0;
-      const opacity = getLayerOpacity(order, total, sliderValue);
-      layer.style.opacity = String(opacity);
-      layer.classList.toggle('is-fading', opacity > 0 && opacity < 1);
+      const inst = fadingInst.get(layer);
+      if (inst) layer.style.setProperty('--v', getVisibility(inst, sliderValue).toFixed(3));
     });
   }
 
@@ -292,7 +350,7 @@
     info.places.replaceChildren();
     scene.institutions.forEach((inst) => {
       const li = el('li', 'place');
-      if (inst.order != null) li.classList.add('is-privileged');
+      if (inst.fades === true) li.classList.add('is-privileged');
 
       const head = el('div', 'place-head');
       head.appendChild(el('strong', 'place-kind', inst.kind));
@@ -304,6 +362,14 @@
       if (metric) {
         const row = el('div', 'place-metric');
         const bar = el('div', 'metric-bar');
+        if (inst.fades === true) {
+          // Bereich, in dem das Gebäude im Bild verblasst
+          const band = el('span', 'metric-fade');
+          band.style.left = `${DATA.fade.gone}%`;
+          band.style.width = `${DATA.fade.full - DATA.fade.gone}%`;
+          band.title = `Im Bild: unter ${DATA.fade.full} % verblasst das Gebäude, bei ${DATA.fade.gone} % ist es weg`;
+          bar.appendChild(band);
+        }
         bar.appendChild(el('span', 'metric-fill'));
         const top = el('span', 'metric-top');
         top.style.left = `${metric.values[DATA.tiers.length - 1]}%`;
@@ -321,6 +387,11 @@
         li.appendChild(caption);
       } else {
         li.appendChild(el('p', 'metric-caption', 'Bleibt sichtbar — für alle erreichbar.'));
+      }
+      if (inst.fades === 'zugespitzt') {
+        li.appendChild(
+          el('p', 'place-note', 'Im Bild zugespitzt: Verschwindet ganz links, obwohl die Daten das so nicht zeigen.')
+        );
       }
       li.dataset.metric = inst.metric || '';
       info.places.appendChild(li);
@@ -368,11 +439,10 @@
     });
     showTierVariant(info.heroNote, tier);
 
-    const total = getLayerCount(scene);
     info.places.querySelectorAll('.place').forEach((li, i) => {
       const inst = scene.institutions[i];
-      if (inst.order != null) {
-        li.classList.toggle('is-hidden', getLayerOpacity(inst.order, total, value) < 0.05);
+      if (inst.fades) {
+        li.classList.toggle('is-hidden', getVisibility(inst, value) < 0.05);
       }
       const metric = DATA.metrics[li.dataset.metric];
       if (!metric) return;
@@ -388,10 +458,12 @@
   /* ── Steuerung ── */
 
   function applySlider(value) {
-    DATA.scenes.forEach((scene, i) => updatePrivilegeLayers(slides[i], getLayerCount(scene), value));
+    slides.forEach((slideEl) => updatePrivilegeLayers(slideEl, value));
     const tier = DATA.tiers[getTier(value)];
     statusEl.textContent = `${tier.label} · ${tier.income} netto`;
     slider.setAttribute('aria-valuenow', String(value));
+    // Erst „Schieb den Regler“, nach der ersten Bewegung „Warum verschwinden …?“
+    if (value < 100) scrollHint.classList.add('is-why');
     updateInfo(value);
   }
 
@@ -422,6 +494,20 @@
 
   slider.addEventListener('input', () => applySlider(Number(slider.value)));
 
+  // Vor der ersten Bewegung: zum Regler. Danach: zur Informationsebene,
+  // aber nicht unter die klebende Reglerleiste.
+  scrollHint.addEventListener('click', (e) => {
+    e.preventDefault();
+    if (!scrollHint.classList.contains('is-why')) {
+      slider.focus({ preventScroll: true });
+      slider.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      return;
+    }
+    const controlsHeight = document.getElementById('controls').offsetHeight;
+    const top = document.getElementById('info').getBoundingClientRect().top + window.scrollY - controlsHeight;
+    window.scrollTo({ top, behavior: 'smooth' });
+  });
+
   prevBtn.addEventListener('click', () => goToSlide(currentSlide - 1));
   nextBtn.addEventListener('click', () => goToSlide(currentSlide + 1));
 
@@ -435,4 +521,6 @@
   buildStaticInfo();
   initDots();
   goToSlide(0);
+
+  new ResizeObserver(() => viewport.querySelectorAll('.scene').forEach(positionLabels)).observe(viewport);
 })();

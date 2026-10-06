@@ -25,14 +25,18 @@ Pro Szene in `data.js`:
 
 1. **`base`** — Foto ohne die „privilegierten“ Gebäude.
 2. **`institutions[].img`** — jedes Gebäude, das verschwinden soll, als PNG mit transparentem Hintergrund.
-3. **`institutions[].order`** — gesetzt = verschwindet; `0` blendet zuerst aus. Ohne `order` bleibt die Einrichtung immer sichtbar.
+3. **`institutions[].fades: true`** — das Gebäude blendet datenbasiert aus (siehe unten). Ohne `fades` bleibt die Einrichtung immer sichtbar.
+   `fades: 'zugespitzt'` blendet ganz links plakativ aus, unabhängig von den Daten (z. B. Realschulen); die Informationsebene weist darauf hin.
+4. **`institutions[].label`** — `[x, y]` in Prozent des Fotos: Position des Gebäude-Labels.
 
 Solange eine Szene kein `base`-Foto hat, zeigt sie Platzhalter-Kacheln mit den Einrichtungen.
 
 ## Slider
 
-- **Links (0)** — niedrige Klasse: alle privilegierten Ebenen unsichtbar
-- **Rechts (100)** — hohe Klasse: alle Ebenen sichtbar
+- **Links (0)** — niedrige Klasse
+- **Rechts (100)** — hohe Klasse
+
+Wann ein Gebäude verschwindet, bestimmen die Daten: Die Kennzahl der Einrichtung (z. B. Gymnasialbesuch) wird zwischen den Stufen stufenlos interpoliert. Über `fade.full` (60 %) ist das Gebäude voll sichtbar, darunter verblasst es und bei `fade.gone` (20 %) ist es weg. Uni und Gymnasium verschwinden also nicht schlagartig, sondern in dem Tempo, in dem die Chancen sinken.
 
 Der Regler gilt für alle Szenen gleichzeitig und steuert auch die Informationsebene. Die Position wird in sechs Herkunftsstufen aus Bildung und Haushaltseinkommen der Eltern übersetzt. Die Stufen folgen der Diagonale des ifo-Chancenmonitors (Gymnasialbesuch nach Abitur der Eltern × Einkommen, Mikrozensus 2022), damit jede Stufe einer echten, gemessenen Kombination entspricht.
 

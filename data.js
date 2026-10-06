@@ -31,6 +31,20 @@ window.KLASSISMUS_DATA = {
     { label: 'Eltern mit Hochschulabschluss', short: 'Studium', income: 'über 6.000 €', funnel: 1 },
   ],
 
+  /*
+   * Datenbasiertes Ausblenden: Die Kennzahl einer Einrichtung (`metric`) wird zwischen den
+   * Stufenmitten stufenlos interpoliert. Ab `full` % ist das Gebäude voll sichtbar, darunter
+   * verblasst es gleichmäßig und ist bei `gone` % ganz weg. Die Grenzen sind eine
+   * gestalterische Setzung: Geht nur noch etwa jedes fünfte Kind diesen Weg, ist er im Bild weg.
+   */
+  fade: {
+    gone: 20,
+    full: 60,
+    // `fades: 'zugespitzt'`: bewusst plakativ nach Reglerposition (weg bei 4, voll ab 20) —
+    // die Informationsebene weist darauf hin, dass die Daten das nicht so zeigen.
+    zugespitzt: [4, 20],
+  },
+
   metrics: {
     gymnasium: {
       label: 'besuchen ein Gymnasium',
@@ -129,96 +143,81 @@ window.KLASSISMUS_DATA = {
   },
 
   /*
-   * Szenen = Fotostandorte in Augsburg.
-   * - `base`: Foto ohne die privilegierten Orte (optional; ohne Foto wird ein Platzhalter gezeigt)
-   * - `institutions[].order`: gesetzt = verschwindet beim Verschieben nach links (0 zuerst).
-   *   Ohne `order` bleibt die Einrichtung immer sichtbar.
-   * - `institutions[].img`: freigestelltes PNG dieser Einrichtung (optional)
+   * Szenen = Fotostandorte.
+   * - `base`: Foto ohne die freigestellten Gebäude (optional; ohne Foto wird ein Platzhalter gezeigt)
+   * - `institutions[].fades`: true = blendet je nach Kennzahl (`metric`) aus, siehe `fade`;
+   *   'zugespitzt' = blendet ganz links plakativ aus, auch wenn die Daten das nicht decken.
+   *   Ohne `fades` bleibt die Einrichtung immer sichtbar.
+   * - `institutions[].img`: freigestelltes PNG dieser Einrichtung (optional, gleiche Größe wie `base`)
+   * - `institutions[].label`: [x, y] in Prozent des Fotos, Spitze des Labels zeigt dorthin (optional)
    * - `institutions[].metric`: Schlüssel aus `metrics` (optional)
    * - `hero`: Kennzahl für die 100-Punkte-Grafik
    */
   scenes: [
     {
-      title: 'Auf dem Kreuz',
-      place: 'Innenstadt Nord · Domviertel',
-      intro: 'Mittelschule, Realschule, Berufsschule und Gymnasium liegen hier kaum 300 Meter auseinander. Räumlich Nachbarn — und doch führen sie in sehr unterschiedliche Leben.',
+      title: 'Kriemhildenstraße',
+      place: 'Augsburg · Stadtjägerviertel',
+      intro: 'Ein Gymnasium mitten im Wohnviertel, für alle sichtbar. Ob es für ein Kind nach der vierten Klasse auch erreichbar ist, entscheidet sich vor allem am Elternhaus.',
       base: 'img/1_bg.jpg',
       hero: 'gymnasium',
       institutions: [
         { name: 'St.-Georg-Mittelschule', address: 'Auf dem Kreuz 25', kind: 'Mittelschule', metric: 'mittelschule' },
         { name: 'Welserschule', address: 'Jesuitengasse 14', kind: 'Kaufm. Berufsschule' },
-        { name: 'Agnes-Bernauer-Realschule', address: 'Auf dem Kreuz 36', kind: 'Realschule', metric: 'realschule' },
-        { name: 'Maria-Ward-Gymnasium', address: 'Frauentorstraße 26', kind: 'Gymnasium', metric: 'gymnasium', order: 0, img: 'img/gymnasium_1.png' },
+        { name: 'Agnes-Bernauer-Realschule', address: 'Auf dem Kreuz 36', kind: 'Realschule', metric: 'realschule', fades: 'zugespitzt' },
+        { name: 'Jakob-Fugger-Gymnasium', address: 'Kriemhildenstraße 5', kind: 'Gymnasium', metric: 'gymnasium', fades: true, img: 'img/gymnasium_1.png', label: [42.7, 35] },
       ],
       facts: [
-        { value: '5,9 %', text: 'der Eltern von Gymnasiast*innen haben höchstens einen Hauptschulabschluss. An Hauptschulen sind es 41,7 %.', source: 'bpb2019' },
         { value: '46 : 83', text: 'Von je 100 Kindern erreichen 46 aus Nicht-Akademiker- und 83 aus Akademikerfamilien die gymnasiale Oberstufe.', source: 'dzhw2018' },
         { value: '40 % : 63 %', text: 'Kinder gut verdienender Eltern ohne Abitur (über 6.000 €) gehen seltener aufs Gymnasium als Kinder von Eltern mit zwei Abiturzeugnissen und weniger als 2.750 €. Bildung wiegt schwerer als Geld.', source: 'chancenmonitor2026' },
       ],
     },
     {
-      title: 'Ulrichsviertel',
-      place: 'Maximilianstraße Süd · Predigerberg',
-      intro: 'Förderzentrum, Berufsschulen für soziale Berufe, Realschule und Gymnasium teilen sich wenige Straßenzüge. Wer wo landet, entscheidet sich oft schon mit zehn Jahren.',
+      title: 'Tannenstraße',
+      place: 'Fürth · Innenstadt',
+      intro: 'Mittelschule, Realschule und Gymnasium stehen hier Wand an Wand. Nach der vierten Klasse werden die Kinder auf drei Gebäude verteilt — und in welches sie gehen, folgt deutlich dem Elternhaus.',
+      base: 'img/4_bg.jpg',
       hero: 'gymnasium',
       institutions: [
-        { name: 'Ulrichschule', address: 'Maximilianstraße 52', kind: 'Förderzentrum' },
-        { name: 'Berufsschulzentrum für soziale Berufe', address: 'Predigerberg 1', kind: 'Berufsschule' },
-        { name: 'Fachakademie für Hauswirtschaft', address: 'Maximilianstraße 79', kind: 'Fachakademie' },
-        { name: 'Mädchenrealschule St. Ursula', address: 'Bei Sankt Ursula 2', kind: 'Realschule', metric: 'realschule' },
-        { name: 'Holbein-Gymnasium', address: 'Hallstraße 10', kind: 'Gymnasium', metric: 'gymnasium', order: 0 },
+        { name: 'Otto-Seeling-Mittelschule', address: 'Otto-Seeling-Promenade 31', kind: 'Mittelschule', metric: 'mittelschule', img: 'img/4_Mittelschule.png', label: [45.5, 17] },
+        { name: 'Leopold-Ullstein-Realschule', address: 'Sigmund-Nathan-Straße 1', kind: 'Realschule', metric: 'realschule', fades: 'zugespitzt', img: 'img/4_realschule.png', label: [33, 48] },
+        { name: 'Helene-Lange-Gymnasium', address: 'Tannenstraße 20', kind: 'Gymnasium', metric: 'gymnasium', fades: true, img: 'img/4_Gymnasium.png', label: [55, 33] },
       ],
       facts: [
-        { value: '73,1 %', text: 'der Jugendlichen, die 2022 eine Förderschule verließen, gingen ohne Hauptschulabschluss.', source: 'kmk2022' },
+        { value: '5,9 %', text: 'der Eltern von Gymnasiast*innen haben höchstens einen Hauptschulabschluss. An Hauptschulen sind es 41,7 %.', source: 'bpb2019' },
         { value: '16,9 % → 40 %', text: 'Ohne Abitur in der Familie hängt es besonders am Geld: Mit steigendem Einkommen wächst die Gymnasialquote auf mehr als das Doppelte.', source: 'chancenmonitor2026' },
         { value: '67,1 %', text: 'der Eltern von Gymnasiast*innen haben selbst (Fach-)Abitur — deutlich mehr als im Schnitt aller Schularten.', source: 'bpb2019' },
       ],
     },
     {
-      title: 'Grottenau',
-      place: 'Königsplatz · Innenstadt',
-      intro: 'Zwischen Grottenau und Schaezlerstraße: eine Berufsfachschule für Altenpflege, ein Gymnasium und das Leopold-Mozart-Zentrum der Universität, an dem Musik studiert wird.',
+      title: 'Oettingenstraße',
+      place: 'München · Lehel · am Englischen Garten',
+      intro: 'Die Helen-Keller-Realschule und das Institut für Informatik der LMU liegen Wand an Wand am Englischen Garten. Wer auf dem Schulhof steht, sieht die Uni — ob der Weg dorthin führt, hängt stark vom Elternhaus ab.',
+      base: 'img/2_bg.jpg',
       hero: 'studium',
       institutions: [
-        { name: 'St.-Anna-Grundschule', address: 'Schaezlerstraße 26', kind: 'Grundschule' },
-        { name: 'Heimerer Schule', address: 'Ludwigstraße 19', kind: 'Berufsfachschule Altenpflege' },
-        { name: 'Maria-Theresia-Gymnasium', address: 'Gutenbergstraße 1', kind: 'Gymnasium', metric: 'gymnasium', order: 1 },
-        { name: 'Leopold-Mozart-Zentrum', address: 'Grottenau 1', kind: 'Universität', metric: 'studium', order: 0 },
+        { name: 'Helen-Keller-Realschule', address: 'Oettingenstraße 78', kind: 'Realschule', metric: 'realschule', fades: 'zugespitzt', img: 'img/2_helen-keller-realschule.png', label: [62.6, 45] },
+        { name: 'Institut für Informatik der LMU', address: 'Oettingenstraße 67', kind: 'Universität', metric: 'studium', fades: true, img: 'img/2_lmu-informatik.png', label: [33.5, 30] },
       ],
       facts: [
-        { value: '22 % : 9 %', text: 'der Studienanfänger*innen aus Nicht-Akademiker- bzw. Akademikerfamilien kommen ohne gymnasiales Abitur an die Hochschule — etwa über Ausbildung und Berufsoberschule.', source: 'stifterverband2021' },
+        { value: '79 : 27', text: 'Von je 100 Kindern beginnen 79 aus Akademiker- und 27 aus Nicht-Akademikerfamilien ein Studium.', source: 'dzhw2018' },
+        { value: '22 % : 9 %', text: 'der Studienanfänger*innen aus Nicht-Akademiker- bzw. Akademikerfamilien kommen ohne gymnasiales Abitur an die Hochschule — etwa über Realschule, Ausbildung und Berufsoberschule.', source: 'stifterverband2021' },
         { value: '56 %', text: 'aller Studierenden haben mindestens ein Elternteil mit Hochschulabschluss.', source: 'sozialerhebung2021' },
       ],
     },
     {
-      title: 'Campus Süd',
-      place: 'Universitätsviertel · Alter Postweg',
-      intro: 'Am Rand des Uni-Campus liegen das Berufsbildungswerk, eine Berufsschule und die Technikerschule. Derselbe Stadtteil, völlig unterschiedliche Aussichten auf Einkommen und Status.',
+      title: 'Campus Deutz',
+      place: 'Köln · Deutz · Betzdorfer Straße',
+      intro: 'Das Hans-Böckler-Berufskolleg und der Campus Deutz der TH Köln liegen nur einen Parkplatz auseinander. Am Berufskolleg lässt sich die Fachhochschulreife erwerben — wie viele danach über den Platz ins Studium gehen, hängt stark vom Elternhaus ab.',
+      base: 'img/3_bg.jpg',
       hero: 'studium',
       institutions: [
-        { name: 'Berufsbildungswerk Augsburg', address: 'Hugo-Eckener-Straße 25', kind: 'Berufliche Reha' },
-        { name: 'Berufsschule St. Elisabeth', address: 'Fritz-Wendel-Straße 4', kind: 'Berufsschule' },
-        { name: 'Technikerschule Augsburg', address: 'Alter Postweg 101', kind: 'Fachschule' },
-        { name: 'Universität Augsburg', address: 'Universitätsstraße 2', kind: 'Universität', metric: 'studium', order: 0 },
+        { name: 'Hans-Böckler-Berufskolleg', address: 'Köln-Deutz', kind: 'Berufskolleg', img: 'img/3_berufskolleg.png', label: [56, 52] },
+        { name: 'TH Köln, Campus Deutz', address: 'Betzdorfer Straße 2', kind: 'Hochschule', metric: 'studium', fades: true, img: 'img/3_th-koeln.png', label: [24, 42] },
       ],
       facts: [
-        { value: '56 %', text: 'der Studierenden haben mindestens ein Elternteil mit Hochschulabschluss.', source: 'sozialerhebung2021' },
-        { value: '13 %', text: 'der Studierenden erhielten 2021 BAföG.', source: 'sozialerhebung2021' },
-        { value: '2 : 6', text: 'Von 100 Kindern promovieren 2 aus Nicht-Akademiker- und 6 aus Akademikerfamilien.', source: 'stifterverband2021' },
-      ],
-    },
-    {
-      title: 'Klinikum',
-      place: 'Universitätsklinikum · Kriegshaber',
-      intro: 'Am Uniklinikum lernen Pflegekräfte und studieren Ärzt*innen auf demselben Gelände. Beide arbeiten später am selben Bett — mit sehr unterschiedlichen Zugangswegen.',
-      hero: 'studium',
-      institutions: [
-        { name: 'Akademie für Gesundheitsberufe', address: 'Stenglinstraße', kind: 'Berufsfachschulen Pflege' },
-        { name: 'Medizincampus', address: 'Delbrückstraße', kind: 'Medizinstudium', metric: 'studium', order: 0 },
-      ],
-      facts: [
-        { value: '76 % : 82 %', text: 'Einmal eingeschrieben, schließen Nicht-Akademiker- und Akademikerkinder den Bachelor fast gleich oft ab. Die Auslese passiert vorher.', source: 'stifterverband2021' },
+        { value: '22 % : 9 %', text: 'der Studienanfänger*innen aus Nicht-Akademiker- bzw. Akademikerfamilien kommen ohne gymnasiales Abitur an die Hochschule — etwa über Ausbildung, Berufskolleg oder Berufsoberschule.', source: 'stifterverband2021' },
         { value: '79 : 27', text: 'Von je 100 Kindern beginnen 79 aus Akademiker- und 27 aus Nicht-Akademikerfamilien ein Studium.', source: 'dzhw2018' },
+        { value: '56 %', text: 'aller Studierenden haben mindestens ein Elternteil mit Hochschulabschluss.', source: 'sozialerhebung2021' },
       ],
     },
   ],
